@@ -1,0 +1,128 @@
+<!Doctype html>
+<head>
+    <title>
+        Hangman Game for JS homework week 3 GT BC
+    </title>
+    <!--<script type="text/javascript" src="/games.js" ></script> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+
+</head>
+
+<body>
+
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+               <div class="jumbotron text-center">
+                   <h1 id="musicDropIn"><strong>Suspend{erson</strong></h1>
+               </div>                    
+            </div>
+        </div>
+    </div>
+        <div class="row">
+
+            <div class="col-xs-8 col-xs-offset-2 text-center">
+                <h3><span id="bandPic">Press Any Key</span></h3>
+                <br>
+                <h2>Wins:<span id="wins"></span></h2>
+                <br>
+                <h1>Current Word</h1>
+                <h3><span id="wordOnScreen"></span></h3> <br>
+                <span>cheats</span><br><span style="background-color: lawngreen"><span id="test"></span></span>
+
+                <h3> guesses remaining <span id="gC">..</span></h3><br>
+                <h3> wrong guesses <span id="guessed"></span></h3>
+                <h2><span id="youLose"></span></h2>
+                
+
+            </div>
+        </div>
+
+<script>
+
+    var bands = ['Nirvana' , 'Pearl Jam' , 'Radiohead' , '2Pac' , 'Red Hot Chili Peppers', 'Beck' , 'Smashing Pumpkins',
+        'Beastie Boys' , 'REM' ,'Dr Dre', 'wheezer' , 'tool', 'sublime', 'seal', 'TLC', 'Snoop Dogg', 'Nas', 'OutKast' ];
+    //var pics = ['https://i2.wp.com/www.punchland.com/wp-content/uploads/2014/09/not-a-selfie.jpg?resize=702%2C526'];
+
+    var currentWord = [];
+    var guessed = document.getElementById('guessed');
+    var guessedArr =[];
+    var wordOnScreen= document.getElementById('wordOnScreen');
+    var wins = document.getElementById('wins');
+    var win = 0;
+    var test = document.getElementById('test');
+    var brokenTeethArr = [];
+    var guessCounter = document.getElementById("gC");
+    var youLose = document.getElementById("youLose");
+    //var bandPic = document.createElement("bandPic");
+
+
+    function start() {
+        currentWord = bands[Math.floor(Math.random() * 18)];
+        currentWord = currentWord.split('');
+        test.textContent = currentWord.join(' ');
+
+        guessedArr = [];
+
+        guessCounter.textContent = Math.ceil(currentWord.length * 2.1);
+        var counter = Math.ceil(currentWord.length * 2.1);
+
+        for (var i = 0; i < currentWord.length; i++) {
+            brokenTeethArr.push("_");
+            wordOnScreen.textContent = brokenTeethArr.join(' ');
+        }
+
+
+        document.onkeydown = function (event) {
+
+            youLose.textContent = [];
+
+            if ((currentWord.indexOf(event.key)) === -1 && guessedArr.indexOf(event.key) === -1) {
+                guessedArr.push(event.key);
+                guessed.textContent = guessedArr.join(" ");
+                guessCounter.textContent = Number(guessCounter.textContent) - 1;
+                counter = counter - 1;
+
+
+            }
+            if (currentWord.indexOf(event.key) !== -1) {
+                var x = event.key;
+                brokenTeethArr.splice(currentWord.indexOf(event.key), 1, x);
+                wordOnScreen.textContent = brokenTeethArr.join(' ');
+                currentWord.splice(currentWord.indexOf(event.key), 1, '%');
+
+            }
+            if (counter < 1) {
+                youLose.textContent = "YOU LoSE!!!!!!!!!!!!!";
+                //bandPic = pics[0];
+                brokenTeethArr = [];
+                currentWord = [];
+                start();
+
+            }
+            if (brokenTeethArr.indexOf('_') === -1) {
+                win++;
+                wins.textContent = win;
+                youLose.textContent = "you WINNNN!!!";
+                //bandPic = pics[0];
+                brokenTeethArr = [];
+                currentWord = [];
+                start();
+
+            }
+
+
+        };
+
+    }
+
+    start();
+
+
+
+
+
+</script>
+
+</body>
